@@ -145,7 +145,8 @@ func (e *StreamError) Unwrap() error {
 
 // TweetMessage is the tweet stream message
 type TweetMessage struct {
-	Raw *TweetRaw
+	Raw           *TweetRaw
+	MatchingRules []*string `json:"matching_rules"`
 }
 
 // SystemMessage is the system stream message
@@ -237,8 +238,8 @@ func (ts *TweetStream) handle(stream io.ReadCloser) {
 		}
 
 		if _, tweet := msgMap[tweetStart]; tweet {
-			single := &tweetraw{}
-			if err := json.Unmarshal(msg, single); err != nil {
+			tweetMsg := &TweetMessage{}
+			if err := json.Unmarshal(msg, tweetMsg); err != nil {
 				sErr := &StreamError{
 					Type: TweetErrorType,
 					Msg:  "unmarshal tweet stream",
@@ -249,15 +250,6 @@ func (ts *TweetStream) handle(stream io.ReadCloser) {
 				default:
 				}
 				continue
-			}
-			raw := &TweetRaw{}
-			raw.Tweets = make([]*TweetObj, 1)
-			raw.Tweets[0] = single.Tweet
-			raw.Includes = single.Includes
-			raw.Errors = single.Errors
-
-			tweetMsg := &TweetMessage{
-				Raw: raw,
 			}
 
 			select {
