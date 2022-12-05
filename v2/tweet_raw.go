@@ -62,6 +62,13 @@ type tweetraw struct {
 	Errors   []*ErrorObj       `json:"errors"`
 }
 
+type streamedTweetRaw struct {
+	Tweet         *TweetObj         `json:"data"`
+	Includes      *TweetRawIncludes `json:"includes"`
+	Errors        []*ErrorObj       `json:"errors"`
+	MatchingRules []string          `json:"matching_rules"`
+}
+
 // TweetRaw is the raw response from the tweet lookup endpoint
 type TweetRaw struct {
 	Tweets       []*TweetObj       `json:"data"`
@@ -70,8 +77,30 @@ type TweetRaw struct {
 	dictionaries map[string]*TweetDictionary
 }
 
+// TweetRaw is the raw response from the tweet stream endpoint
+type StreamedTweetRaw struct {
+	Tweets        []*TweetObj       `json:"data"`
+	Includes      *TweetRawIncludes `json:"includes,omitempty"`
+	Errors        []*ErrorObj       `json:"errors,omitempty"`
+	MatchingRules []string          `json:"matching_rules"`
+	dictionaries  map[string]*TweetDictionary
+}
+
 // TweetDictionaries create a map of tweet dictionaries from the raw tweet response
 func (t *TweetRaw) TweetDictionaries() map[string]*TweetDictionary {
+	if t.dictionaries != nil {
+		return t.dictionaries
+	}
+
+	t.dictionaries = map[string]*TweetDictionary{}
+	for _, tweet := range t.Tweets {
+		t.dictionaries[tweet.ID] = CreateTweetDictionary(*tweet, t.Includes)
+	}
+	return t.dictionaries
+}
+
+// TweetDictionaries create a map of tweet dictionaries from the raw tweet response
+func (t *StreamedTweetRaw) TweetDictionaries() map[string]*TweetDictionary {
 	if t.dictionaries != nil {
 		return t.dictionaries
 	}

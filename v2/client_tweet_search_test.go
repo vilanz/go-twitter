@@ -1314,7 +1314,7 @@ func TestClient_TweetSearchStream(t *testing.T) {
 			},
 			wantTweet: []*TweetMessage{
 				{
-					Raw: &TweetRaw{
+					Raw: &StreamedTweetRaw{
 						Tweets: []*TweetObj{
 							{
 								ID:   "1",
@@ -1324,7 +1324,7 @@ func TestClient_TweetSearchStream(t *testing.T) {
 					},
 				},
 				{
-					Raw: &TweetRaw{
+					Raw: &StreamedTweetRaw{
 						Tweets: []*TweetObj{
 							{
 								ID:   "2",
@@ -1334,7 +1334,7 @@ func TestClient_TweetSearchStream(t *testing.T) {
 					},
 				},
 				{
-					Raw: &TweetRaw{
+					Raw: &StreamedTweetRaw{
 						Tweets: []*TweetObj{
 							{
 								ID:   "3",

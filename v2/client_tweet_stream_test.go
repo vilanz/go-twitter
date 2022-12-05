@@ -41,11 +41,11 @@ func TestClient_TweetSampleStream(t *testing.T) {
 					if strings.Contains(req.URL.String(), string(tweetSampleStreamEndpoint)) == false {
 						log.Panicf("the url is not correct %s %s", req.URL.String(), tweetSampleStreamEndpoint)
 					}
-					stream := `{"data":{"id":"1","text":"hello"}}`
+					stream := `{"data":{"id":"1","text":"hello"}, "matching_rules": ["rule 1"]}`
 					stream += "\r\n"
 					stream += `{"error":{"message":"Forced Disconnect: Too many connections. (Allowed Connections = 2)","sent":"2017-01-11T18:12:52+00:00"}}`
 					stream += "\r\n"
-					stream += `{"data":{"id":"2","text":"world"}}`
+					stream += `{"data":{"id":"2","text":"world"}, "matching_rules": ["rule 2"]}`
 					stream += "\r\n"
 					stream += "\r\n"
 					stream += "\r\n"
@@ -73,27 +73,33 @@ func TestClient_TweetSampleStream(t *testing.T) {
 			},
 			wantTweet: []*TweetMessage{
 				{
-					Raw: &TweetRaw{
+					Raw: &StreamedTweetRaw{
 						Tweets: []*TweetObj{
 							{
 								ID:   "1",
 								Text: "hello",
 							},
 						},
+						MatchingRules: []string{
+							"rule 1",
+						},
 					},
 				},
 				{
-					Raw: &TweetRaw{
+					Raw: &StreamedTweetRaw{
 						Tweets: []*TweetObj{
 							{
 								ID:   "2",
 								Text: "world",
 							},
 						},
+						MatchingRules: []string{
+							"rule 2",
+						},
 					},
 				},
 				{
-					Raw: &TweetRaw{
+					Raw: &StreamedTweetRaw{
 						Tweets: []*TweetObj{
 							{
 								ID:   "3",

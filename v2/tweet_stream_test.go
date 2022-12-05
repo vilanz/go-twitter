@@ -23,9 +23,9 @@ func Test_StartTweetStreamMessage(t *testing.T) {
 			name: "tweet stream",
 			args: args{
 				stream: func() io.ReadCloser {
-					stream := `{"data":{"id":"1","text":"hello"}}`
+					stream := `{"data":{"id":"1","text":"hello"}, "matching_rules": ["rule 1"]}`
 					stream += "\r\n"
-					stream += `{"data":{"id":"2","text":"world"}}`
+					stream += `{"data":{"id":"2","text":"world"}, "matching_rules": ["rule 2"]}`
 					stream += "\r\n"
 					stream += `{"data":{"id":"3","text":"!!"}}`
 					return io.NopCloser(strings.NewReader(stream))
@@ -33,27 +33,33 @@ func Test_StartTweetStreamMessage(t *testing.T) {
 			},
 			want: []*TweetMessage{
 				{
-					Raw: &TweetRaw{
+					Raw: &StreamedTweetRaw{
 						Tweets: []*TweetObj{
 							{
 								ID:   "1",
 								Text: "hello",
 							},
 						},
+						MatchingRules: []string{
+							"rule 1",
+						},
 					},
 				},
 				{
-					Raw: &TweetRaw{
+					Raw: &StreamedTweetRaw{
 						Tweets: []*TweetObj{
 							{
 								ID:   "2",
 								Text: "world",
 							},
 						},
+						MatchingRules: []string{
+							"rule 2",
+						},
 					},
 				},
 				{
-					Raw: &TweetRaw{
+					Raw: &StreamedTweetRaw{
 						Tweets: []*TweetObj{
 							{
 								ID:   "3",
@@ -208,7 +214,7 @@ func Test_StartTweetStream(t *testing.T) {
 			},
 			wantTweet: []*TweetMessage{
 				{
-					Raw: &TweetRaw{
+					Raw: &StreamedTweetRaw{
 						Tweets: []*TweetObj{
 							{
 								ID:   "1",
@@ -218,7 +224,7 @@ func Test_StartTweetStream(t *testing.T) {
 					},
 				},
 				{
-					Raw: &TweetRaw{
+					Raw: &StreamedTweetRaw{
 						Tweets: []*TweetObj{
 							{
 								ID:   "2",
@@ -228,7 +234,7 @@ func Test_StartTweetStream(t *testing.T) {
 					},
 				},
 				{
-					Raw: &TweetRaw{
+					Raw: &StreamedTweetRaw{
 						Tweets: []*TweetObj{
 							{
 								ID:   "3",
