@@ -237,7 +237,7 @@ func (ts *TweetStream) handle(stream io.ReadCloser) {
 		}
 
 		if _, tweet := msgMap[tweetStart]; tweet {
-			single := &streamedTweetRaw{}
+			single := &streamedTweetRawJSON{}
 			if err := json.Unmarshal(msg, single); err != nil {
 				sErr := &StreamError{
 					Type: TweetErrorType,

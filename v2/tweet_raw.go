@@ -56,13 +56,13 @@ type UserTimelineMeta struct {
 	PreviousToken string `json:"previous_token"`
 }
 
-type tweetraw struct {
+type tweetRawJSON struct {
 	Tweet    *TweetObj         `json:"data"`
 	Includes *TweetRawIncludes `json:"includes"`
 	Errors   []*ErrorObj       `json:"errors"`
 }
 
-type streamedTweetRaw struct {
+type streamedTweetRawJSON struct {
 	Tweet         *TweetObj         `json:"data"`
 	Includes      *TweetRawIncludes `json:"includes"`
 	Errors        []*ErrorObj       `json:"errors"`
