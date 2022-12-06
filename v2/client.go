@@ -45,9 +45,9 @@ const (
 
 // Client is used to make twitter v2 API callouts.
 //
-// Authorizer is used to add auth to the request
+// # Authorizer is used to add auth to the request
 //
-// Client is the HTTP client to use for all requests
+// # Client is the HTTP client to use for all requests
 //
 // Host is the base URL to use like, https://api.twitter.com
 type Client struct {
@@ -218,7 +218,7 @@ func (c *Client) TweetLookup(ctx context.Context, ids []string, opts TweetLookup
 	raw := &TweetRaw{}
 	switch {
 	case len(ids) == 1:
-		single := &tweetraw{}
+		single := &tweetRawJSON{}
 		if err := decoder.Decode(single); err != nil {
 			return nil, &ResponseDecodeError{
 				Name:      "tweet lookup",
