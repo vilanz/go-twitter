@@ -23,9 +23,9 @@ func Test_StartTweetStreamMessage(t *testing.T) {
 			name: "tweet stream",
 			args: args{
 				stream: func() io.ReadCloser {
-					stream := `{"data":{"id":"1","text":"hello"}, "matching_rules": ["rule 1"]}`
+					stream := `{"data":{"id":"1","text":"hello"}, "matching_rules": [{ "id": "rule 1", "tag": "rule tag 1" }]}`
 					stream += "\r\n"
-					stream += `{"data":{"id":"2","text":"world"}, "matching_rules": ["rule 2"]}`
+					stream += `{"data":{"id":"2","text":"world"}, "matching_rules": [{ "id": "rule 2", "tag": "rule tag 2" }]}`
 					stream += "\r\n"
 					stream += `{"data":{"id":"3","text":"!!"}}`
 					return io.NopCloser(strings.NewReader(stream))
@@ -40,8 +40,11 @@ func Test_StartTweetStreamMessage(t *testing.T) {
 								Text: "hello",
 							},
 						},
-						MatchingRules: []string{
-							"rule 1",
+						MatchingRules: []*MatchingRule{
+							{
+								Id:  "rule 1",
+								Tag: "rule tag 1",
+							},
 						},
 					},
 				},
@@ -53,8 +56,11 @@ func Test_StartTweetStreamMessage(t *testing.T) {
 								Text: "world",
 							},
 						},
-						MatchingRules: []string{
-							"rule 2",
+						MatchingRules: []*MatchingRule{
+							{
+								Id:  "rule 2",
+								Tag: "rule tag 2",
+							},
 						},
 					},
 				},
@@ -195,11 +201,11 @@ func Test_StartTweetStream(t *testing.T) {
 			name: "tweet stream",
 			args: args{
 				stream: func() io.ReadCloser {
-					stream := `{"data":{"id":"1","text":"hello"}}`
+					stream := `{"data":{"id":"1","text":"hello"}, "matching_rules": [{ "id": "rule 1", "tag": "rule tag 1" }]}`
 					stream += "\r\n"
 					stream += `{"error":{"message":"Forced Disconnect: Too many connections. (Allowed Connections = 2)","sent":"2017-01-11T18:12:52+00:00"}}`
 					stream += "\r\n"
-					stream += `{"data":{"id":"2","text":"world"}}`
+					stream += `{"data":{"id":"2","text":"world"}, "matching_rules": [{ "id": "rule 2", "tag": "rule tag 2" }]}`
 					stream += "\r\n"
 					stream += "\r\n"
 					stream += "\r\n"
@@ -221,6 +227,12 @@ func Test_StartTweetStream(t *testing.T) {
 								Text: "hello",
 							},
 						},
+						MatchingRules: []*MatchingRule{
+							{
+								Id:  "rule 1",
+								Tag: "rule tag 1",
+							},
+						},
 					},
 				},
 				{
@@ -229,6 +241,12 @@ func Test_StartTweetStream(t *testing.T) {
 							{
 								ID:   "2",
 								Text: "world",
+							},
+						},
+						MatchingRules: []*MatchingRule{
+							{
+								Id:  "rule 2",
+								Tag: "rule tag 2",
 							},
 						},
 					},

@@ -62,13 +62,6 @@ type tweetRawJSON struct {
 	Errors   []*ErrorObj       `json:"errors"`
 }
 
-type streamedTweetRawJSON struct {
-	Tweet         *TweetObj         `json:"data"`
-	Includes      *TweetRawIncludes `json:"includes"`
-	Errors        []*ErrorObj       `json:"errors"`
-	MatchingRules []string          `json:"matching_rules"`
-}
-
 // TweetRaw is the raw response from the tweet lookup endpoint
 type TweetRaw struct {
 	Tweets       []*TweetObj       `json:"data"`
@@ -77,12 +70,24 @@ type TweetRaw struct {
 	dictionaries map[string]*TweetDictionary
 }
 
+type MatchingRule struct {
+	Id  string `json:"id"`
+	Tag string `json:"tag"`
+}
+
+type streamedTweetRawJSON struct {
+	Tweet         *TweetObj         `json:"data"`
+	Includes      *TweetRawIncludes `json:"includes"`
+	Errors        []*ErrorObj       `json:"errors"`
+	MatchingRules []*MatchingRule   `json:"matching_rules"`
+}
+
 // TweetRaw is the raw response from the tweet stream endpoint
 type StreamedTweetRaw struct {
 	Tweets        []*TweetObj       `json:"data"`
 	Includes      *TweetRawIncludes `json:"includes,omitempty"`
 	Errors        []*ErrorObj       `json:"errors,omitempty"`
-	MatchingRules []string          `json:"matching_rules"`
+	MatchingRules []*MatchingRule   `json:"matching_rules"`
 	dictionaries  map[string]*TweetDictionary
 }
 

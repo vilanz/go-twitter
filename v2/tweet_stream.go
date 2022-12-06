@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -236,8 +235,6 @@ func (ts *TweetStream) handle(stream io.ReadCloser) {
 			}
 			continue
 		}
-
-		log.Printf("Received message: %v", msgMap)
 
 		if _, tweet := msgMap[tweetStart]; tweet {
 			single := &streamedTweetRawJSON{}
